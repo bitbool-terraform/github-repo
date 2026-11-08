@@ -1,12 +1,6 @@
 locals {
   repository_name = var.create_repository ? github_repository.this[0].name : var.name
 
-  actions_secrets = {
-    AZURE_CLIENT_ID = var.azure_client_id
-  }
-
-  actions_variables = {}
-
   workflow_filename = ".github/workflows/main-aca-${var.systemenv}"
   env_filename = ".github/envs/${var.deploy_env}"
 

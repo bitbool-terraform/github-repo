@@ -14,27 +14,23 @@ resource "github_repository" "this" {
 }
 
 resource "github_actions_secret" "this" {
-  for_each = local.actions_secrets
+  for_each = var.actions_secrets
 
   repository      = local.repository_name
   secret_name     = each.key
   plaintext_value = local.actions_secrets[each.key]
 
-  depends_on = [
-    github_repository.this
-  ]
+  depends_on = [github_repository.this]
 }
 
 resource "github_actions_variable" "this" {
-  for_each = local.actions_variables
+  for_each = var.actions_variables
 
   repository    = local.repository_name
   variable_name = each.key
   value         = each.value
 
-  depends_on = [
-    github_repository.this
-  ]
+  depends_on = [github_repository.this]
 }
 
 resource "github_repository_file" "this" {
@@ -49,7 +45,5 @@ resource "github_repository_file" "this" {
   commit_email        = var.commit_email
   overwrite_on_create = true
 
-  depends_on = [
-    github_repository.this
-  ]
+  depends_on = [github_repository.this]
 }

@@ -2,8 +2,22 @@ variable "repo_name" {
   type        = string
 }
 
-variable "systemenv" {}
-variable "resource_group" {}
+variable "create_repository" {
+  type        = bool
+  default     = false
+}
+
+variable "deploy_branches" {
+  default = []
+}
+
+variable "actions_variables" {
+  default = {}
+}
+
+variable "actions_secrets" {
+  default = {}
+}
 
 variable "description" {
   type        = string
@@ -20,46 +34,14 @@ variable "visibility" {
   }
 }
 
-variable "create_repository" {
-  type        = bool
-  default     = true
-}
-
 variable "default_branch" {
   type        = string
   default     = "main"
 }
 
-variable "deploy_branch" {
+variable "workflow_name_prefix" {
   type        = string
-}
-
-variable "deploy_env" {
-  type        = string
-}
-variable "azure_client_id" {
-  type        = string
-}
-
-variable "acr_name" {
-  type        = string
-}
-
-variable "acr_registry" {
-  type        = string
-}
-
-variable "acr_repo" {
-  type        = string
-}
-
-variable "container_app_name" {
-  type        = string
-}
-
-variable "workflow_filename" {
-  type        = string
-  default     = ".github/workflows/main-aca-ci.yml"
+  default     = "deploy-"
 }
 
 variable "commit_author" {
@@ -69,10 +51,10 @@ variable "commit_author" {
 
 variable "commit_email" {
   type        = string
-  default     = "antonis@bitbool.net"
+  default     = "pseudorandomized@gmail.com"
 }
 
 variable "commit_message" {
   type        = string
-  default     = "[DevOps] Update CI workflow"
+  default     = "[DevOps] Updated CI/CD pipelines"
 }
