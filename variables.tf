@@ -7,10 +7,6 @@ variable "create_repository" {
   default     = false
 }
 
-variable "deploy_branches" {
-  default = []
-}
-
 variable "actions_variables" {
   default = {}
 }
@@ -71,4 +67,14 @@ variable "additional_files" {
   }))
 
   default = {}
+}
+
+variable "deploy_branches" {
+  type    = list(string)
+  default = []
+}
+
+variable "docker_build_deploy_ref" {
+  type    = string
+  default = "v2"
 }
