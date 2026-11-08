@@ -35,6 +35,11 @@ variable "default_branch" {
   default     = "main"
 }
 
+variable "enable_ci" {
+  type        = bool
+  default     = true
+}
+
 variable "workflow_name_prefix" {
   type        = string
   default     = "deploy-"
@@ -50,7 +55,7 @@ variable "commit_email" {
   default     = "pseudorandomized@gmail.com"
 }
 
-variable "skip_ci" {
+variable "skip_ci_on_commit" {
   type        = bool
   default     = true
 }

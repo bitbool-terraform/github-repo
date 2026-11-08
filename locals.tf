@@ -1,10 +1,9 @@
 locals {
-  repository_name = var.create_repository ? github_repository.this[0].name : var.name
+  repository_name = var.create_repository ? github_repository.this[0].name : var.repo_name
 
   workflow_filename = ".github/workflows/deploy.yml"
-  env_filename = ".github/envs/${var.deploy_env}"
 
-  skip_ci = var.skip_ci ? "[skip ci]" : ""
+  skip_ci = var.skip_ci_on_commit ? "[skip ci]" : ""
   commit_message = "[DevOps]${local.skip_ci} Updated CI/CD pipelines"
 
   ci_file = {
@@ -18,21 +17,14 @@ locals {
     }
   }
 
-  env_file = {
-    "${local.env_filename}" = {
-      content = templatefile("${path.module}/templates/env.tftpl", {
-        container_app_name = var.container_app_name
-        resource_group = var.resource_group
-
-      })
-      # commit_message = 
-    }
-  }
+  env_file = {}
 
   # repository_files = merge(local.ci_file,local.env_file)
 
   target_branches = sort(distinct(concat([var.default_branch],var.deploy_branches)))
-  file_templates = merge(local.ci_file,var.additional_files)
+
+  ci_file_enabled = var.enable_ci ? local.ci_file : {}
+  file_templates = merge(local.ci_file_enabled,var.additional_files)
 
   repository_files = {
     for pair in setproduct(local.target_branches, keys(local.file_templates)) :

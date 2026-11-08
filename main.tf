@@ -1,7 +1,7 @@
 resource "github_repository" "this" {
   count = var.create_repository ? 1 : 0
 
-  name        = var.name
+  name        = var.repo_name
   description = var.description
   visibility  = var.visibility
 
@@ -18,7 +18,7 @@ resource "github_actions_secret" "this" {
 
   repository      = local.repository_name
   secret_name     = each.key
-  plaintext_value = local.actions_secrets[each.key]
+  plaintext_value = var.actions_secrets[each.key]
 
   depends_on = [github_repository.this]
 }
