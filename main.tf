@@ -37,10 +37,10 @@ resource "github_repository_file" "this" {
   for_each = local.repository_files
 
   repository          = local.repository_name
-  branch              = var.default_branch
-  file                = each.key
+  branch              = each.value.branch
+  file                = each.value.file
   content             = each.value.content
-  commit_message      = coalesce(each.value.commit_message, "Manage ${each.key} via Terraform")
+  commit_message      = coalesce(var.commit_message ,try(each.value.commit_message, null), local.commit_message)
   commit_author       = var.commit_author
   commit_email        = var.commit_email
   overwrite_on_create = true

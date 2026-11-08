@@ -54,7 +54,21 @@ variable "commit_email" {
   default     = "pseudorandomized@gmail.com"
 }
 
+variable "skip_ci" {
+  type        = bool
+  default     = true
+}
+
 variable "commit_message" {
   type        = string
-  default     = "[DevOps] Updated CI/CD pipelines"
+  default     = null
+}
+
+variable "additional_files" {
+  type = map(object({
+    content        = string
+    commit_message = optional(string)
+  }))
+
+  default = {}
 }

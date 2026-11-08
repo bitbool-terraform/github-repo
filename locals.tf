@@ -4,6 +4,9 @@ locals {
   workflow_filename = ".github/workflows/main-aca-${var.systemenv}"
   env_filename = ".github/envs/${var.deploy_env}"
 
+  skip_ci = var.skip_ci ? "[skip ci]" : ""
+  commit_message = "[DevOps]${local.skip_ci} Updated CI/CD pipelines"
+
   ci_file = {
     "${local.workflow_filename}" = {
       content = templatefile("${path.module}/templates/main-aca.yml.tftpl", {
@@ -13,7 +16,7 @@ locals {
         azure_acr_registry = var.acr_registry
         azure_acr_repo = var.acr_repo
       })
-      commit_message = var.commit_message
+      # commit_message = 
     }
   }
 
@@ -24,9 +27,23 @@ locals {
         resource_group = var.resource_group
 
       })
-      commit_message = var.commit_message
+      # commit_message = 
     }
   }
 
-  repository_files = merge(local.ci_file,local.env_file)
+  # repository_files = merge(local.ci_file,local.env_file)
+
+  target_branches = sort(distinct(concat([var.default_branch],var.deploy_branches)))
+  file_templates = merge(local.ci_file,var.additional_files)
+
+  repository_files = {
+    for pair in setproduct(local.target_branches, keys(local.file_templates)) :
+    "${pair[0]}::${pair[1]}" => merge(
+      local.file_templates[pair[1]],
+      {
+        branch = pair[0]
+        file   = pair[1]
+      }
+    )
+  }
 }
