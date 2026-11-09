@@ -83,3 +83,13 @@ variable "docker_build_deploy_ref" {
   type    = string
   default = "v2"
 }
+
+variable "build_profile" {
+  type    = string
+  default = "generic"
+}
+
+variable "deploy_profile" {
+  type    = string
+  default = "aca"
+}

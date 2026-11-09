@@ -6,9 +6,13 @@ locals {
   skip_ci = var.skip_ci_on_commit ? "[skip ci]" : ""
   commit_message = "[DevOps]${local.skip_ci} Updated CI/CD pipelines"
 
+  selected_profile = local.profiles[var.deploy_profile][var.build_profile]
+
+  workflow_template = lookup(local.selected_profile,"workflow",local.profiles[var.deploy_profile]["generic"].workflow)
+
   ci_file = {
     "${local.workflow_filename}" = {
-      content = templatefile("${path.module}/templates/aca-deploy.yml.tftpl", {
+      content = templatefile("${path.module}/templates/${local.selected_profile.workflow}", {
         deploy_branches         = var.deploy_branches
         docker_build_deploy_ref = var.docker_build_deploy_ref
     })

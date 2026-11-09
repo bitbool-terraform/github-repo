@@ -1,0 +1,25 @@
+FROM maven:3-eclipse-temurin-21 AS build
+
+ENV APP_HOME=/app
+
+RUN mkdir -p $APP_HOME
+
+WORKDIR $APP_HOME
+
+COPY pom.xml checkstyle.xml $APP_HOME
+COPY src $APP_HOME/src
+RUN mvn -B clean package -DskipTests=true
+
+FROM eclipse-temurin:21-jdk
+ENV APP_HOME=/app
+
+ARG JAVA_OTEL_VERSION=2.17.0
+
+WORKDIR $APP_HOME
+COPY --from=build $APP_HOME/target/met-mit-api.jar /app-service/app.jar
+WORKDIR /app-service
+
+ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v${JAVA_OTEL_VERSION}/opentelemetry-javaagent.jar /opentelemetry-javaagent.jar
+    
+EXPOSE 8080
+CMD ["java", "-jar", "app.jar"]
