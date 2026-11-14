@@ -86,7 +86,7 @@ variable "docker_build_deploy_ref" {
 
 variable "build_profile" {
   type    = string
-  default = "generic"
+  default = "docker"
 }
 
 variable "deploy_profile" {

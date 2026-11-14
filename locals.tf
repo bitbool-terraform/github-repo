@@ -1,14 +1,14 @@
 locals {
   repository_name = var.create_repository ? github_repository.this[0].name : var.repo_name
 
-  workflow_filename = ".github/workflows/deploy.yml"
+  workflow_filename = ".github/workflows/ci.yml"
 
   skip_ci = var.skip_ci_on_commit ? "[skip ci]" : ""
   commit_message = "[DevOps]${local.skip_ci} Updated CI/CD pipelines"
 
   selected_profile = local.profiles[var.deploy_profile][var.build_profile]
 
-  workflow_template = lookup(local.selected_profile,"workflow",local.profiles[var.deploy_profile]["generic"].workflow)
+  workflow_template = lookup(local.selected_profile,"workflow",local.profiles[var.deploy_profile]["docker"].workflow)
 
   ci_file = {
     "${local.workflow_filename}" = {

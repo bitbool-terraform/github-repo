@@ -1,7 +1,7 @@
 locals {
 profiles = {
     "aca" = {
-        "generic" = {
+        "docker" = {
             workflow = "workflows-aca/docker-deploy.yml.tftpl"
         }
         "java-spring" = {
